@@ -1,0 +1,13 @@
+body {
+    /* font-family: 'Open Sans', sans-serif; */
+}
+
+table {
+}
+
+
+/* Customization */
+/* Removing extra padding */
+#wpcontent {
+    padding: 0 !important;
+}

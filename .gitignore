@@ -1,0 +1,11 @@
+# Node modules
+node_modules
+
+# Composer
+vendor
+
+# PHPUnit
+phpunit-coverage
+phpunit-coverage.xml
+phpunit-reports
+phpunit-reports.xml

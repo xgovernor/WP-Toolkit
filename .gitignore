@@ -9,3 +9,6 @@ phpunit-coverage
 phpunit-coverage.xml
 phpunit-reports
 phpunit-reports.xml
+
+# Examples
+examples

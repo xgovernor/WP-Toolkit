@@ -266,8 +266,6 @@ class WPL_Settings
             return;
         }
 
-
-
         // Enqueue custom stylesheet for the plugin
         wp_enqueue_style(
             'wpl-toolkit-admin-css', // Handle for the stylesheet

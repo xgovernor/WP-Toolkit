@@ -150,16 +150,16 @@ class WPL_Settings
     public static function register_activation_settings()
     {
         // Register the API key setting
-        register_setting('wpl_toolkit_activation_settings', 'wpl_api_key', [
+        register_setting('wpl_toolkit_api_settings', 'wpl_api_key', [
             'sanitize_callback' => [self::class, 'sanitize_api_key'],
         ]);
 
-        // Add settings section
+        // Add API settings section
         add_settings_section(
-            'wpl_toolkit_main_section',
+            'wpl_toolkit_api_section',
             __('API Settings', 'wpl-toolkit'),
-            [self::class, 'render_settings_section_activation'],
-            'wpl_toolkit_activation_settings'
+            [self::class, 'render_api_settings_section'],
+            'wpl_toolkit_api_settings'
         );
 
         // Add API key field
@@ -167,15 +167,15 @@ class WPL_Settings
             'wpl_api_key',
             __('API Key', 'wpl-toolkit'),
             [self::class, 'api_key_field_callback'],
-            'wpl_toolkit_activation_settings',
-            'wpl_toolkit_main_section'
+            'wpl_toolkit_api_settings',
+            'wpl_toolkit_api_section'
         );
     }
 
     /**
      * Callback for rendering the settings section description
      */
-    public static function render_settings_section_activation()
+    public static function render_api_settings_section()
     {
         echo '<p>' . esc_html__('Enter your API key to connect with the WPL platform.', 'wpl-toolkit') . '</p>';
     }

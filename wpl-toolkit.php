@@ -39,11 +39,6 @@ require_once WPL_TOOLKIT_DIR . 'includes/class-api.php';
 require_once WPL_TOOLKIT_DIR . 'includes/class-webhooks.php';
 require_once WPL_TOOLKIT_DIR . 'includes/class-snippets.php';
 
-// Activation hook
-register_activation_hook(__FILE__, ['WPL_Toolkit', 'activate']);
-
-// Initialize the plugin
-add_action('plugins_loaded', ['WPL_Toolkit', 'init']);
 
 /**
  * Main plugin class
@@ -171,3 +166,10 @@ class WPL_Toolkit
     }
 
 }
+
+// Register activation and deactivation hooks
+register_activation_hook( __FILE__, ['WPL_Toolkit', 'activate'] );
+register_deactivation_hook( __FILE__, ['WPL_Toolkit', 'deactivate'] );
+
+// Initialize the plugin
+add_action( 'plugins_loaded', ['WPL_Toolkit', 'init'] );

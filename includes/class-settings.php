@@ -15,7 +15,6 @@ class WPL_Settings
 
         // Enqueue admin scripts and styles
         add_action('admin_enqueue_scripts', [self::class, 'enqueue_admin_scripts']);
-        add_action('admin_enqueue_scripts', [self::class, 'enqueue_admin_styles']);
     }
 
     /**
@@ -145,7 +144,6 @@ class WPL_Settings
         <?php
     }
 
-
     /**
      * Register activation settings, sections, and fields
      */
@@ -268,6 +266,18 @@ class WPL_Settings
             return;
         }
 
+
+
+        // Enqueue custom stylesheet for the plugin
+        wp_enqueue_style(
+            'wpl-toolkit-admin-css', // Handle for the stylesheet
+            WPL_TOOLKIT_URL . 'assets/css/admin-style.css', // Path to the CSS file
+            [], // Dependencies
+            WPL_TOOLKIT_VERSION, // Version number
+            'all' // Media type (all, screen, print, etc.)
+        );
+
+        // Enqueue admin scripts
         wp_enqueue_script(
             'wpl-toolkit-admin-js',
             WPL_TOOLKIT_URL . 'assets/js/wpl-toolkit-admin.js',
@@ -281,23 +291,6 @@ class WPL_Settings
             'ajaxurl' => admin_url('admin-ajax.php'),
             'security' => wp_create_nonce('wpl_toolkit_test_api'),
         ]);
-    }
-
-    public static function enqueue_admin_styles($hook)
-    {
-        // Only load styles on the WPL Toolkit plugin's admin pages
-        if ($hook !== 'settings_page_wpl-toolkit-settings') {
-            return;
-        }
-
-        // Enqueue custom stylesheet for the plugin
-        wp_enqueue_style(
-            'wpl-toolkit-admin-css', // Handle for the stylesheet
-            WPL_TOOLKIT_URL . 'assets/css/admin-style.css', // Path to the CSS file
-            [], // Dependencies
-            '1.0.0', // Version number
-            'all' // Media type (all, screen, print, etc.)
-        );
     }
 
 }

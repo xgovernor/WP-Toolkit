@@ -1,34 +1,30 @@
 <?php
-    $upload_dir = wp_upload_dir();
-    $dir = $upload_dir['basedir'] . '/wpl-toolkit';
+    $uploads_dir = wp_upload_dir()['basedir'] . '/wpl-toolkit/';
+    $snippets = array();
 
     // Ensure the directory exists
-    if (!is_dir($dir)) {
+    if (!is_dir($uploads_dir)) {
         echo '<div class="notice notice-error"><p>' . esc_html__('The snippets directory does not exist.', 'wpl-toolkit') . '</p></div>';
         return;
     }
 
     // Get list of files in the directory
-    $files = array_diff(scandir($dir), array('.', '..'));
-
-    // Initialize an empty array to store the snippets
-    $snippets = array();
+    $files = array_diff(scandir($uploads_dir), array('.', '..'));
 
     foreach ($files as $file) {
-    // Assuming each file is a snippet and you want to display its name and additional details
-    $file_path = $dir . '/' . $file;
-    if (is_file($file_path)) {
-        // Add the snippet file to the array with appropriate details
-        // You can modify the details based on your needs
-        $snippets[] = array(
-            'name' => esc_html($file),
-            'file' => esc_html($file),
-            'status' => '<span class="status-enabled">' . esc_html__('Enabled', 'wpl-toolkit') . '</span>', // Placeholder status
-            'actions' => '<button type="button" class="button action-enable" data-file="' . esc_attr($file) . '">' . esc_html__('Enable', 'wpl-toolkit') . '</button>
-                          <button type="button" class="button action-disable" data-file="' . esc_attr($file) . '">' . esc_html__('Disable', 'wpl-toolkit') . '</button>'
-        );
+        // Assuming each file is a snippet and you want to display its name and additional details
+        $file_path = $uploads_dir . '/' . $file;
+        if (is_file($file_path)) {
+            // Add the snippet file to the array with appropriate details
+            // You can modify the details based on your needs
+            $snippets[] = array(
+                'name' => esc_html($file), // Convert into File Name" format
+                'size' => esc_html(filesize($file_path)),
+                'modified' => date('F d Y H:i:s', filemtime($file_path)),
+                'status' => '<span class="status-enabled">' . esc_html__('Enabled', 'wpl-toolkit') . '</span>', // Placeholder status
+            );
+        }
     }
-}
 ?>
 <div class="wrap" style="max-width: 800px; margin: 0 auto; padding-top: 1px">
     <h2><?php esc_html_e('Manage Snippets', 'wpl-toolkit'); ?></h2>
@@ -38,7 +34,8 @@
         <thead>
             <tr>
                 <th><?php esc_html_e('Snippet Name', 'wpl-toolkit'); ?></th>
-                <th><?php esc_html_e('File', 'wpl-toolkit'); ?></th>
+                <th><?php esc_html_e('Size', 'wpl-toolkit'); ?></th>
+                <th><?php esc_html_e('Last Modified', 'wpl-toolkit'); ?></th>
                 <th><?php esc_html_e('Status', 'wpl-toolkit'); ?></th>
                 <th><?php esc_html_e('Actions', 'wpl-toolkit'); ?></th>
             </tr>
@@ -53,9 +50,13 @@
                 <?php foreach ($snippets as $snippet) : ?>
                     <tr>
                         <td><?php echo $snippet['name']; ?></td>
-                        <td><?php echo $snippet['file']; ?></td>
+                        <td><?php echo ceil($snippet['size'] / 1024 ) . ' KB'; ?></td>
+                        <td><?php echo $snippet['modified']; ?></td>
                         <td><?php echo $snippet['status']; ?></td>
-                        <td><?php echo $snippet['actions']; ?></td>
+                        <td>
+                            <button type="button" class="button action-enable" data-file="<?php  echo $snippet['name']; ?>"><?php  echo esc_html__('Enable', 'wpl-toolkit') ; ?></button>
+                            <button type="button" class="button action-disable" data-file="<?php  echo esc_attr($snippet['name']); ?>"><?php echo esc_html__('Disable', 'wpl-toolkit'); ?></button>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             <?php endif; ?>

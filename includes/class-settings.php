@@ -43,7 +43,7 @@ if ( ! class_exists( 'WPL_Settings' ) ) {
 				'manage_options', // Capability
 				'wpl-toolkit-settings', // Menu slug
 				array(self::class, 'render_wpl_toolkit_page'), // Callback function
-				'dashicons-admin-plugins', // Icon
+				'dashicons-superhero', // Icon
 				100// Position
 			);
 		}
@@ -262,7 +262,8 @@ if ( ! class_exists( 'WPL_Settings' ) ) {
 		/**
 		 * Enqueue admin scripts and localize data for AJAX
 		 */
-		public static function enqueue_admin_scripts( $hook ) {
+		public static function enqueue_admin_scripts($hook): void
+		{
 			// Only load scripts on the WPL Toolkit settings and snippets pages
 			if ($hook !== 'toplevel_page_wpl-toolkit-settings') {
 				return;

@@ -12,3 +12,6 @@ phpunit-reports.xml
 
 # Examples
 examples
+
+# Author Specific
+NOTE.txt

@@ -106,6 +106,7 @@ if ( ! class_exists( 'WPL_Toolkit' ) ) {
 		}
 
 		private function setup_constants(): void {
+			define( 'WPLTK_PLUGIN_BASENAME', value: plugin_basename( __FILE__ ) );
 			define( 'WPLTK_PLUGIN_VERSION', value: '1.0.0' );
 			define( 'WPLTK_PLUGIN_PATH', value: trailingslashit( plugin_dir_path( __FILE__ ) ) );
 			define( 'WPLTK_PLUGIN_URL', value: plugin_dir_url( __FILE__ ) );
@@ -270,6 +271,7 @@ if ( ! class_exists( 'WPL_Toolkit' ) ) {
 			);
 			foreach ( $db_options as $option ) {
 				delete_option( $option );
+				delete_site_option( $option );
 			}
 
 			// Remove /wpl-toolkit directory inside /uploads

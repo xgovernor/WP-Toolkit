@@ -1,15 +1,28 @@
 <?php
 /**
- * Settings and Snippets page class for WPL Toolkit
+ * WPL - Settings
+ *
+ * @since 1.0.0
+ *
+ * @package WPLTK
  */
 
 defined( 'ABSPATH' ) or die( 'you do not have access to this page!' );
 
 if ( ! class_exists( 'WPL_Settings' ) ) {
+
+	/**
+	 * Summary of WPL_Settings
+	 */
 	class WPL_Settings {
 
 		private static $_this;
 
+		/**
+		 * Initialize the class and set its properties.
+		 *
+		 * @since    1.0.0
+		 */
 		public function __construct() {
 			if ( isset( self::$_this ) ) {
 				wp_die( 'You can not create more than one instance of WPL_Settings' );
@@ -20,15 +33,41 @@ if ( ! class_exists( 'WPL_Settings' ) ) {
 			add_action( 'admin_init', array( $this, 'register_settings' ) );
 			add_action( 'admin_init', array( $this, 'register_activation_settings' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
+			add_filter('plugin_action_links_' . WPLTK_PLUGIN_BASENAME, array($this, 'plugin_action_links'), 10, 2);
 		}
 
+		public function plugin_action_links($links): array
+		{
+			$pre_links = array(
+				'<a href="https://wpl-toolkit.com" target="_blank">' . __('WPL Studio', 'wpl-toolkit') . '</a>',
+				'<a href="' . admin_url('admin.php?page=wpl-toolkit-settings&tab=settings') . '">' . __('Settings', 'wpl-toolkit') . '</a>',
+			);
+			$post_links = array(
+				'<a href="' . admin_url('admin.php?page=wpl-toolkit-settings&tab=help') . '">' . __('Help', 'wpl-toolkit') . '</a>',
+			);
+			// $links[] = '<a href="' . admin_url('admin.php?page=wpl-toolkit-settings') . '">' . __('Settings', 'wpl-toolkit') . '</a>';
+			return array_merge($pre_links, $links, $post_links);
+		}
+
+		/**
+		 * Get the single instance of WPL_Settings.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @return WPL_Settings The single instance of WPL_Settings.
+		 */
 		public static function this(): mixed
 		{
 			return self::$_this;
 		}
 
 		/**
-		 * Add settings and snippets pages to the WordPress admin menu
+		 * Add the admin menu page for WPL Toolkit.
+		 *
+		 * Checks if the logged in user has the capability to manage options.
+		 * If they don't, the function exits early.
+		 *
+		 * @since 1.0.0
 		 */
 		public static function add_pages(): void
 		{
@@ -49,7 +88,15 @@ if ( ! class_exists( 'WPL_Settings' ) ) {
 		}
 
 		/**
-		 * Register settings and fields
+		 * Register settings
+		 *
+		 * Note: The 'wpl' prefix is used to avoid conflicts with other plugins.
+		 *
+		 * - Remove data on plugin deactivation
+		 * - Toggle WPL Toolbox access
+		 * - Add WPL Toolbox user access role
+		 *
+		 * @since 1.0.0
 		 */
 		public static function register_settings() {
 			/**

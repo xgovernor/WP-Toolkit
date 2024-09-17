@@ -16,24 +16,24 @@ $wpl_options = get_option( 'wpltk_settings' );
 if ( isset( $wpl_options['delete_data_on_uninstall'] ) && $wpl_options['delete_data_on_uninstall'] ) {
 
 	// Delete options
-	$wpltk_options = array(
-		'wpltk_settings',             // General settings.
-		'wpltk_key',                  // API key.
-		'wpltk_snippets',             // Snippets data.
-		'wpltk_version',              // Plugin version.
-		'wpltk_license_attempt',      // License attempt
-		'wpltk_license_status',       // License status.
-		'wpltk_license_key',          // License key.
-		'wpltk_debug',                // Debug mode.
-		'wpltk_onboarding_dismissed', // Dismissed onboarding.
-		'wpltk_show_onboarding',      // Show onboarding.
-		'wpltk_admin_notices',         // Admin notices.
+	$db_options = array(
+		'wpltk_api_key',
+		'wpltk_snippets',
+		'wpltk_show_onboarding',
+		'wpltk_onboarding_dismissed',
+		'wpltk_update_notice',
+		'wpltk_update_notice_dismissed',
+		'wpltk_freeze_access',
+		'wpltk_version',
+		'wpltk_previous_version',
+		'wpltk_installation_date',
+		'wpltk_activation_date',
+		'wpltk_options',
+		'wpltk_settings',
 	);
-
-	// Delete options and site options.
-	foreach ( $wpltk_options as $wpltk_option ) {
-		delete_option( $wpltk_option );
-		delete_site_option( $wpltk_option ); // Multisite-safe deletion.
+	foreach ( $db_options as $option ) {
+		delete_option( $option );
+		delete_site_option( $option );
 	}
 
 

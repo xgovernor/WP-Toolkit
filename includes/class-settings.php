@@ -22,28 +22,29 @@ if ( ! class_exists( 'WPL_Settings' ) ) {
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
 		}
 
-		public static function this() {
+		public static function this(): mixed
+		{
 			return self::$_this;
 		}
 
 		/**
 		 * Add settings and snippets pages to the WordPress admin menu
 		 */
-		public static function add_pages() {
+		public static function add_pages(): void
+		{
 			// If the logged in user doesn't have one of the whitelisted roles, exit
 			if ( ! current_user_can( 'manage_options' ) ) {
 				return;
 			}
 
-			// Add snippets page as a submenu of settings menu
-			add_submenu_page(
-				'options-general.php',                      // Parent slug
-				__( 'WPL Toolkit', 'wpl-toolkit' ),           // Page title
-				__( 'WPL Toolkit', 'wpl-toolkit' ),           // Menu title
-				'manage_options',                           // Capability
-				'wpl-toolkit-settings',                     // Menu slug
-				array( self::class, 'render_wpl_toolkit_page' ),   // Callback function
-				10                                           // Position
+			add_menu_page(
+				__('WPL Toolkit', 'wpl-toolkit'), // Page title
+				__('WPL Toolkit', 'wpl-toolkit'),  // Page title
+				'manage_options', // Capability
+				'wpl-toolkit-settings', // Menu slug
+				array(self::class, 'render_wpl_toolkit_page'), // Callback function
+				'dashicons-admin-plugins', // Icon
+				100// Position
 			);
 		}
 
@@ -263,7 +264,7 @@ if ( ! class_exists( 'WPL_Settings' ) ) {
 		 */
 		public static function enqueue_admin_scripts( $hook ) {
 			// Only load scripts on the WPL Toolkit settings and snippets pages
-			if ( $hook !== 'settings_page_wpl-toolkit-settings' ) {
+			if ($hook !== 'toplevel_page_wpl-toolkit-settings') {
 				return;
 			}
 

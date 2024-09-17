@@ -1,17 +1,36 @@
 {
-  "name": "wp-toolkit",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "wp-scripts build",
-    "start": "wp-scripts start"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "@wordpress/scripts": "^29.0.0"
-  }
+	"name": "wp-toolkit",
+	"version": "1.0.0",
+	"description": "WPL Toolkit for managing WordPress snippets",
+	"main": "main.js",
+	"author": "Abu Taher Muhammad",
+	"license": "MIT",
+	"private": true,
+	"scripts": {
+		"build": "webpack --mode production",
+		"dev": "webpack --watch --mode development",
+		"clean": "rm -rf assets/build/*",
+		"lint": "eslint assets/js/*",
+		"lint:fix": "eslint --fix assets/js/*",
+		"lint:php": "vendor/bin/phpcs",
+		"lint:php:fix": "vendor/bin/phpcbf"
+	},
+	"devDependencies": {
+		"clean-webpack-plugin": "^4.0.0",
+		"css-loader": "^6.7.1",
+		"eslint": "^8.12.0",
+		"eslint-config-wordpress": "^2.0.0",
+		"eslint-plugin-jsdoc": "^38.1.6",
+		"file-loader": "^6.2.0",
+		"mini-css-extract-plugin": "^2.6.0",
+		"style-loader": "^3.3.1",
+		"stylelint": "^14.6.1",
+		"stylelint-config-wordpress": "^17.0.0",
+		"webpack": "^5.71.0",
+		"webpack-cli": "^4.9.2"
+	},
+	"browserslist": [
+		"defaults"
+	],
+	"dependencies": {}
 }

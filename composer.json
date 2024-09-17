@@ -3,6 +3,11 @@
     "description": "Manage WPL snippets in WordPress, allowing upload, enable/disable, and other snippet operations.",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
+    "version": "1.0.0",
+    "require-dev": {
+        "wp-coding-standards/wpcs": "^3.0",
+        "phpcompatibility/phpcompatibility-wp": "^2.1"
+    },
     "autoload": {
         "psr-4": {
             "d9\\WpToolkit\\": "includes/"
@@ -14,5 +19,13 @@
             "email": "abut1081@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "php": ">=8.0"
+    },
+    "homepage": "https://github.com/abut1081/wp-toolkit",
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
 }

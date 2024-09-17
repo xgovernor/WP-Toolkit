@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<ruleset name="WordPress Coding Standards for WPL Toolkit">
+
+	<!-- WordPress Core Coding Standards -->
+	<rule ref="WordPress-Core">
+		<!-- Allow short array syntax for cleaner code -->
+		<!-- <exclude name="Generic.Arrays.DisallowShortArraySyntax" /> -->
+		<!-- Allow short doc comments for brevity -->
+		<!-- <exclude name="Generic.Commenting.DocComment.MissingShort" /> -->
+		<!-- Allow the short ternary operator ( ?: ) -->
+		<!-- <exclude name="WordPress.PHP.DisallowShortTernary" /> -->
+
+	</rule>
+
+	<!-- Documentation Standards -->
+	<rule ref="WordPress-Docs">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+
+	<!-- Additional WordPress Standards -->
+	<rule ref="WordPress-Extra" />
+
+	<!-- I18n: Ensure text domain consistency for translation -->
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="wpl-toolkit"/> <!-- Updated text domain -->
+				<element value="default"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Exclude certain files from class file naming rules -->
+	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
+		<exclude-pattern>tests/*</exclude-pattern>
+		<exclude-pattern>src/*</exclude-pattern>
+	</rule>
+
+	<!-- Exclude global variable override warnings for test files -->
+	<rule ref="WordPress.WP.GlobalVariablesOverride.Prohibited">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+
+	<!-- Exclude certain files from using alternative WordPress functions -->
+	<rule ref="WordPress.WP.AlternativeFunctions">
+		<exclude-pattern>bin/*</exclude-pattern>
+	</rule>
+
+	<!-- Allow non-hyphenated lowercase for files in the src directory -->
+	<rule ref="WordPress.Files.FileName.NotHyphenatedLowercase">
+		<exclude-pattern>src/*</exclude-pattern>
+	</rule>
+
+	<!-- Enforce PascalCase file names only in src/ -->
+	<rule ref="Squiz.Classes.ClassFileName">
+		<include-pattern>src/*</include-pattern>
+	</rule>
+
+	<!-- Allow TestCase files to be non-hyphenated lowercase -->
+	<rule ref="WordPress.Files.FileName.NotHyphenatedLowercase">
+		<exclude-pattern>tests/php/TestCase.php</exclude-pattern>
+		<exclude-pattern>tests/php/DataProvider.php</exclude-pattern>
+	</rule>
+
+	<!-- Limit consecutive blank lines to 1 instead of 2 -->
+	<rule ref="Squiz.WhiteSpace.FunctionSpacing">
+		<properties>
+			<property name="spacing" value="1"/>
+			<property name="spacingBeforeFirst" value="1"/>
+			<property name="spacingAfterLast" value="0"/>
+		</properties>
+	</rule>
+
+	<!-- General PHPCS arguments and exclusions -->
+	<arg value="s"/>
+	<arg name="extensions" value="php"/>
+	<file>.</file>
+
+	<arg name="basepath" value="./"/>
+	<arg name="parallel" value="20"/>
+
+	<!-- Exclude common directories -->
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern type="relative">assets/build/*</exclude-pattern>
+	<exclude-pattern type="relative">^logs/*</exclude-pattern>
+	<exclude-pattern>/assets/build/js/*.asset.php</exclude-pattern>
+
+</ruleset>

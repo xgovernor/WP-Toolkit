@@ -1,5 +1,6 @@
 (function ($) {
     $(document).ready(function () {
+        console.log('WPL Admin Snippets page loaded');
          // Handle Snippet Download button click
         $('#download-snippet').on('click', function (e) {
             e.preventDefault();
@@ -82,28 +83,29 @@
         //     });
         // });
 
-        $('.button[data-file]').on('click', function() {
+        $('.button[data-file]').on('click', function () {
             var action = $(this).attr('class').split(' ')[1].replace('action-', '');
             var file = $(this).data('file');
 
             $.ajax({
-                url: wplToolkit.ajaxurl,
+                url: ajaxurl,
                 method: 'POST',
                 data: {
-                    action: 'wpl_toolkit_' + action + '_snippet',
+                    action: 'wpl_' + action + '_snippet',
                     snippet: file,
-                    security: wplToolkit.security
+                    _nonce: wplSnippets._nonce
                 },
                 success: function(response) {
                     if (response.success) {
                         alert(response.data);
-                        location.reload();
+                        // location.reload();
                     } else {
                         alert(response.data);
                     }
                 },
-                error: function() {
-                    alert('An error occurred.');
+                error: function (error) {
+                    console.log(error);
+                    alert(error.statusText);
                 }
             });
         });

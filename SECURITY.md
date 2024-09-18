@@ -10,6 +10,6 @@ To report a security vulnerability in WPL Toolkit, please [email us](mailto:secu
 - Affected versions of WPL Toolkit.
 - Any potential mitigations you are aware of.
 
-Before submitting your report, please review our [Coordinated Vulnerability Disclosure Policy](https://wpl-toolkit.com/security) for guidelines on responsible disclosure.
+Before submitting your report, please review our [Coordinated Vulnerability Disclosure Policy](https://docs.wpl-toolkit.com/security) for guidelines on responsible disclosure.
 
 Thank you for helping to keep WPL Toolkit secure!

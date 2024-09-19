@@ -45,8 +45,8 @@ if (file_exists(dirname(__FILE__) . '/vendor/autoload.php')) {
 	include_once dirname(__FILE__) . '/vendor/autoload.php';
 }
 
-// use WPLTK\App\Helpers\Arr;
-// use WPLTK\App\Helpers\Helper;
+use WPLTK\App\Helpers\Arr;
+use WPLTK\App\Helpers\Helper;
 
 
 if ( ! class_exists( 'WPL_Toolkit' ) ) {
@@ -71,8 +71,6 @@ if ( ! class_exists( 'WPL_Toolkit' ) ) {
 		public $snippet_executor;
 
 		private function __construct() {
-			// Load plugin text domain for translations
-			load_plugin_textdomain('wpl-toolkit', false, dirname(path: plugin_basename(__FILE__)) . '/languages');
 		}
 
 		/**
@@ -84,8 +82,34 @@ if ( ! class_exists( 'WPL_Toolkit' ) ) {
 			if ( ! isset( self::$instance ) && ! ( self::$instance instanceof WPL_Toolkit ) ) {
 				self::$instance = new WPL_Toolkit();
 				self::$instance->setup_constants();
+				self::$instance->includes();
 
-				// self::$instance->hooks();
+				if ( is_multisite() ) {
+					self::$instance->multisite = new wpltk_multisite();
+				}
+
+				if ( wpltk_admin_logged_in() ) {
+					self::$instance->cache = new WPLTK_Cache();
+					// self::$instance->placeholder = new WPLTK_Placeholder();
+					// self::$instance->server = new WPLTK_Server();
+					// self::$instance->admin = new WPLTK_Admin();
+					// self::$instance->mailer_admin = new WPLTK_Mailer_Admin();
+					// self::$instance->onboarding = new WPLTK_Onboarding();
+					// self::$instance->progress = new WPLTK_Progress();
+					// self::$instance->certificate = new WPLTK_Certificate();
+					// self::$instance->site_health = new WPLTK_Site_Health();
+					if ( defined( 'WP_CLI' ) && WP_CLI ) {
+						self::$instance->wp_cli = new WPLTK_WP_CLI();
+					}
+
+					self::$instance->settings         = new WPL_Settings();
+					self::$instance->api              = new WPL_Api();
+					self::$instance->webhooks         = new WPL_Webhooks();
+					self::$instance->snippets         = new WPL_Snippets();
+					self::$instance->snippet_executor = new WPL_Snippet_Executor();
+				}
+
+				self::$instance->hooks();
 			}
 
 			return self::$instance;
@@ -103,6 +127,62 @@ if ( ! class_exists( 'WPL_Toolkit' ) ) {
 			define( 'WPLTK_SAFE_INTEGRATION_TIMEOUT', value: 60 * 60 * 24 );  // Snippets integration test's save timeout frame in seconds. After this time, the snippet will be automatically disabled if the integration test fails.
 		}
 
+		private function includes(): void {
+			// Load plugin text domain for translations
+			load_plugin_textdomain('wpl-toolkit', false, dirname(path: plugin_basename(__FILE__)) . '/languages');
+			require_once WPLTK_PLUGIN_PATH . 'functions.php';
+			require_once WPLTK_PLUGIN_PATH . 'includes/class-settings.php';
+			require_once WPLTK_PLUGIN_PATH . 'includes/class-api.php';
+			require_once WPLTK_PLUGIN_PATH . 'includes/class-webhooks.php';
+			require_once WPLTK_PLUGIN_PATH . 'includes/class-snippets.php';
+			require_once WPLTK_PLUGIN_PATH . 'includes/class-snippet-executor.php';
+
+			if ( defined( 'WP_CLI' ) && WP_CLI ) {
+				require_once WPLTK_PLUGIN_PATH . 'includes/class-wp-cli.php';
+			}
+
+			if ( is_multisite() ) {
+				require_once WPLTK_PLUGIN_PATH . 'includes/class-multisite.php';
+			}
+
+			if ( wpltk_admin_logged_in() ) {
+				// require_once( WPLTK_PLUGIN_PATH . 'compatibility.php');
+				// require_once( WPLTK_PLUGIN_PATH . 'upgrade.php');
+				// require_once( WPLTK_PLUGIN_PATH . 'settings/settings.php' );
+				// require_once( WPLTK_PLUGIN_PATH . 'modal/modal.php' );
+				// require_once( WPLTK_PLUGIN_PATH . 'onboarding/class-onboarding.php' );
+				// require_once( WPLTK_PLUGIN_PATH . 'placeholders/class-placeholder.php' );
+				// require_once( WPLTK_PLUGIN_PATH . 'class-admin.php');
+				// require_once( WPLTK_PLUGIN_PATH . 'mailer/class-mail-admin.php');
+				require_once WPLTK_PLUGIN_PATH . 'includes/class-cache.php';
+				// require_once( WPLTK_PLUGIN_PATH . 'class-server.php');
+				// require_once( WPLTK_PLUGIN_PATH . 'progress/class-progress.php');
+				// require_once( WPLTK_PLUGIN_PATH . 'class-site-health.php');
+				// require_once( WPLTK_PLUGIN_PATH . 'mailer/class-mail.php');
+				// if ( isset($_GET['install_pro'])) {
+				// require_once( WPLTK_PLUGIN_PATH . 'upgrade/upgrade-to-pro.php');
+				// }
+			}
+
+			// require_once( WPLTK_PLUGIN_PATH . 'lets-encrypt/cron.php' );
+			// require_once( WPLTK_PLUGIN_PATH . '/security/security.php');
+		}
+
+		private function hooks(): void {
+			if ( wpltk_admin_logged_in() ) {
+
+				// add_action('admin_notices', array( $this, 'admin_notices'));
+				// if ( is_multisite() ) {
+				// add_action('network_admin_notices', array( $this, 'admin_notices'));
+				// }
+			}
+
+			// add_action('wp_loaded', array(self::$instance->front_end, 'force_ssl'), 20);
+
+			// if ( wpltk_admin_logged_in() ) {
+			// add_action('plugins_loaded', array(self::$instance->admin, 'init'), 10);
+			// }
+		}
 
 		/**
 		 * Activate the plugin.
@@ -298,4 +378,61 @@ if ( ! class_exists( 'WPL_Toolkit' ) ) {
 	// Register activation and deactivation hooks
 	register_activation_hook( __FILE__, array( 'WPL_Toolkit', 'activate' ) );
 	register_deactivation_hook( __FILE__, array( 'WPL_Toolkit', 'deactivate' ) );
+}
+
+
+if ( ! function_exists( function: 'wpltk_add_manage_wpltk_capability' ) ) {
+
+	/**
+	 * Add a user capability to WordPress and add to admin and editor role
+	 */
+	function wpltk_add_manage_wpltk_capability(): void {
+		$role = get_role( 'administrator' );
+
+		if ( $role && ! $role->has_cap( 'manage_wpltk' ) ) {
+			$role->add_cap( 'manage_wpltk' );
+		}
+	}
+
+	register_activation_hook( __FILE__, 'wpltk_add_manage_wpltk_capability' );
+}
+
+if ( ! function_exists( 'wpltk_user_can_manage' ) ) {
+
+	/**
+	 * Check if user has required capability
+	 *
+	 * @return bool
+	 */
+	function wpltk_user_can_manage(): bool {
+		if ( current_user_can( 'manage_wpltk' ) ) {
+			return true;
+		}
+
+		// allow wp-cli access to manage_wpltk
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			return true;
+		}
+
+		return false;
+	}
+}
+
+if ( ! function_exists( 'wpltk_admin_logged_in' ) ) {
+
+	function wpltk_admin_logged_in(): bool {
+		$wpcli = defined( 'WP_CLI' ) && WP_CLI;
+		return ( is_admin() && wpltk_user_can_manage() ) || wpltk_is_logged_in_rest() || wp_doing_cron() || $wpcli || defined( 'WPLTK_DOING_SYSTEM_STATUS' ) || defined( 'WPLTK_LEARNING_MODE' );
+	}
+}
+
+if ( ! function_exists( 'wpltk_is_logged_in_rest' ) ) {
+
+	function wpltk_is_logged_in_rest(): bool {
+		$valid_request = isset( $_SERVER['REQUEST_URI'] ) && strpos( $_SERVER['REQUEST_URI'], '/wpltk/v1/' ) !== false;
+		if ( ! $valid_request ) {
+			return false;
+		}
+		return is_user_logged_in();
+	}
 }

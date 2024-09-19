@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <ruleset name="WordPress Coding Standards for WPL Toolkit">
+	<config name="testVersion" value="7.4-" />
 
 	<!-- WordPress Core Coding Standards -->
 	<rule ref="WordPress-Core">
@@ -60,6 +61,10 @@
 	<rule ref="WordPress.Files.FileName.NotHyphenatedLowercase">
 		<exclude-pattern>tests/php/TestCase.php</exclude-pattern>
 		<exclude-pattern>tests/php/DataProvider.php</exclude-pattern>
+	</rule>
+
+	<rule ref="PHPCompatibilityWP">
+		<include-pattern>*\.php$</include-pattern>
 	</rule>
 
 	<!-- Limit consecutive blank lines to 1 instead of 2 -->
